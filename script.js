@@ -14,13 +14,17 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
     if (users[username] && users[username] === password) {
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("username", username);  // Armazenar o nome do usuário
-        window.location.href = "vote.html";
+        if (username === "admin") {
+            window.location.href = "vote.html"; // Admin vai para a página de votação
+        } else {
+            window.location.href = "vote.html"; // Usuário comum vai para a página de votação
+        }
     } else {
         alert("Usuário ou senha incorretos");
     }
 });
 
-// Inicializa os contadores de votos e a pergunta no localStorage
+// Inicializa os contadores de votos e a pergunta no localStorage, se ainda não existirem
 if (!localStorage.getItem("votesYes")) localStorage.setItem("votesYes", 0);
 if (!localStorage.getItem("votesNo")) localStorage.setItem("votesNo", 0);
 if (!localStorage.getItem("question")) localStorage.setItem("question", "Você é a favor da extinção da jornada de trabalho 6x1?");
@@ -52,6 +56,7 @@ function registerVote(vote) {
 
 // Exibir resultado
 document.addEventListener("DOMContentLoaded", function () {
+    const username = localStorage.getItem("username");
     if (window.location.pathname.endsWith("result.html")) {
         const votesYes = localStorage.getItem("votesYes");
         const votesNo = localStorage.getItem("votesNo");
@@ -61,16 +66,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Página de voto (vote.html)
     if (window.location.pathname.endsWith("vote.html")) {
-        const username = localStorage.getItem("username");
         const question = localStorage.getItem("question");
-
         document.getElementById("question").textContent = question; // Exibe a pergunta
 
+        // Exibir as opções administrativas se for admin
         if (username === "admin") {
-            // Exibir as opções administrativas se for admin
             document.getElementById("adminOptions").style.display = "block";
             document.getElementById("resetVotes").addEventListener("click", resetVotes);
             document.getElementById("changeQuestion").addEventListener("click", changeQuestion);
+            // Exibe os resultados para o admin diretamente na página de votação
+            const votesYes = localStorage.getItem("votesYes");
+            const votesNo = localStorage.getItem("votesNo");
+            document.getElementById("adminResults").textContent = `Resultados: Sim - ${votesYes} votos | Não - ${votesNo} votos`;
         }
     }
 });
