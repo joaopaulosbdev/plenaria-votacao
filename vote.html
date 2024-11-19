@@ -10,8 +10,11 @@
     <div class="container">
         <h2 id="question"></h2> <!-- A pergunta será exibida aqui -->
         
-        <button id="voteYes">Sim</button>
-        <button id="voteNo">Não</button>
+        <!-- Botões de votação (ocultos para o admin) -->
+        <div id="voteButtons">
+            <button id="voteYes">Sim</button>
+            <button id="voteNo">Não</button>
+        </div>
 
         <!-- Opções de administração visíveis apenas para o admin -->
         <div id="adminOptions" style="display: none;">
@@ -27,3 +30,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+

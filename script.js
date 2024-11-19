@@ -14,11 +14,7 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
     if (users[username] && users[username] === password) {
         localStorage.setItem("isLoggedIn", true);
         localStorage.setItem("username", username);  // Armazenar o nome do usuário
-        if (username === "admin") {
-            window.location.href = "vote.html"; // Admin vai para a página de votação
-        } else {
-            window.location.href = "vote.html"; // Usuário comum vai para a página de votação
-        }
+        window.location.href = "vote.html";
     } else {
         alert("Usuário ou senha incorretos");
     }
@@ -69,11 +65,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const question = localStorage.getItem("question");
         document.getElementById("question").textContent = question; // Exibe a pergunta
 
-        // Exibir as opções administrativas se for admin
         if (username === "admin") {
+            // Esconder botões de votação para o admin
+            document.getElementById("voteButtons").style.display = "none";
+
+            // Exibir as opções administrativas se for admin
             document.getElementById("adminOptions").style.display = "block";
-            document.getElementById("resetVotes").addEventListener("click", resetVotes);
+            document.getElementById("resetVotes").addEventListener("click", function () {
+                resetVotes();
+                window.location.reload(); // Atualiza a página após o reset
+            });
             document.getElementById("changeQuestion").addEventListener("click", changeQuestion);
+
             // Exibe os resultados para o admin diretamente na página de votação
             const votesYes = localStorage.getItem("votesYes");
             const votesNo = localStorage.getItem("votesNo");
@@ -84,11 +87,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Função para resetar votos
 function resetVotes() {
-    if (confirm("Tem certeza de que deseja resetar os votos?")) {
-        localStorage.setItem("votesYes", 0);
-        localStorage.setItem("votesNo", 0);
-        alert("Votos resetados!");
-    }
+    localStorage.setItem("votesYes", 0);
+    localStorage.setItem("votesNo", 0);
+    alert("Votos resetados!");
 }
 
 // Função para alterar a pergunta
