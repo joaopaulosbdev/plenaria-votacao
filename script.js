@@ -101,3 +101,21 @@ function changeQuestion() {
         window.location.reload(); // Recarregar para exibir a nova pergunta
     }
 }
+
+// Função para deslogar o usuário
+function logout() {
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("username");
+    window.location.href = "index.html"; // Redireciona para a página de login
+}
+
+// Exibir o botão de sair para todos os usuários logados
+document.addEventListener("DOMContentLoaded", function () {
+    if (localStorage.getItem("isLoggedIn")) {
+        const logoutButton = document.getElementById("logoutButton");
+        if (logoutButton) {
+            logoutButton.style.display = "block"; // Torna o botão visível
+            logoutButton.addEventListener("click", logout);
+        }
+    }
+});
