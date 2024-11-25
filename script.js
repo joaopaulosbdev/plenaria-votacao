@@ -58,6 +58,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const votesNo = localStorage.getItem("votesNo");
         
         document.getElementById("results").textContent = `Sim - ${votesYes} votos\nNão - ${votesNo} votos`;
+
+        const logoutButton = document.getElementById("logoutButton");
+        if (localStorage.getItem("isLoggedIn")) {
+            logoutButton.style.display = "block"; // Torna o botão visível
+            logoutButton.addEventListener("click", logout);
+        }
     }
 
     // Página de voto (vote.html)
