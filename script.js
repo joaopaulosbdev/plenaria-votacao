@@ -2,7 +2,7 @@
 const users = {
     "user1": "password1",
     "user2": "password2",
-    "admin": "admin123"  // Novo usuário admin
+    "admin": "admin123" // Novo usuário admin
 };
 
 // Autenticação de login
@@ -10,10 +10,10 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
     e.preventDefault();
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-    
+
     if (users[username] && users[username] === password) {
         localStorage.setItem("isLoggedIn", true);
-        localStorage.setItem("username", username);  // Armazenar o nome do usuário
+        localStorage.setItem("username", username); // Armazenar o nome do usuário
         window.location.href = "vote.html";
     } else {
         alert("Usuário ou senha incorretos");
@@ -24,6 +24,7 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 if (!localStorage.getItem("votesYes")) localStorage.setItem("votesYes", 0);
 if (!localStorage.getItem("votesNo")) localStorage.setItem("votesNo", 0);
 if (!localStorage.getItem("question")) localStorage.setItem("question", "Você é a favor da extinção da jornada de trabalho 6x1?");
+if (!localStorage.getItem("userVotes")) localStorage.setItem("userVotes", JSON.stringify({}));
 
 // Controle de votação
 document.getElementById("voteYes")?.addEventListener("click", function () {
@@ -35,11 +36,29 @@ document.getElementById("voteNo")?.addEventListener("click", function () {
 
 function registerVote(vote) {
     const username = localStorage.getItem("username");
+    const question = localStorage.getItem("question");
+
     if (username === "admin") {
         alert("O administrador não pode votar.");
         return;
     }
 
+    const userVotes = JSON.parse(localStorage.getItem("userVotes"));
+
+    // Verifica se o usuário já votou para a pergunta atual
+    if (userVotes[question] && userVotes[question][username]) {
+        alert("Você já votou nessa pergunta!");
+        return;
+    }
+
+    // Registra o voto do usuário
+    if (!userVotes[question]) {
+        userVotes[question] = {};
+    }
+    userVotes[question][username] = true;
+    localStorage.setItem("userVotes", JSON.stringify(userVotes));
+
+    // Incrementa os votos no localStorage
     if (vote === "Sim") {
         let currentVotes = parseInt(localStorage.getItem("votesYes"));
         localStorage.setItem("votesYes", currentVotes + 1);
@@ -56,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (window.location.pathname.endsWith("result.html")) {
         const votesYes = localStorage.getItem("votesYes");
         const votesNo = localStorage.getItem("votesNo");
-        
+
         document.getElementById("results").textContent = `Sim - ${votesYes} votos\nNão - ${votesNo} votos`;
 
         const logoutButton = document.getElementById("logoutButton");
@@ -95,6 +114,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function resetVotes() {
     localStorage.setItem("votesYes", 0);
     localStorage.setItem("votesNo", 0);
+    localStorage.setItem("userVotes", JSON.stringify({}));
     alert("Votos resetados!");
 }
 
@@ -103,6 +123,12 @@ function changeQuestion() {
     const newQuestion = prompt("Digite a nova pergunta:");
     if (newQuestion) {
         localStorage.setItem("question", newQuestion);
+
+        // Reseta votos e registros de quem já votou
+        localStorage.setItem("votesYes", 0);
+        localStorage.setItem("votesNo", 0);
+        localStorage.setItem("userVotes", JSON.stringify({}));
+
         alert("Pergunta alterada com sucesso!");
         window.location.reload(); // Recarregar para exibir a nova pergunta
     }
@@ -125,3 +151,4 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 });
+
