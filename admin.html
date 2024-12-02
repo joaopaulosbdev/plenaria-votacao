@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Administração</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Administração</h2>
+        <button id="logoutButton">Sair</button>
+        
+        <h3>Opções de Administrador</h3>
+        <!-- Resetar Votos -->
+        <button id="resetVotes">Resetar Votos</button>
+        
+        <!-- Alterar Pergunta -->
+        <button id="changeQuestion">Alterar Pergunta</button>
+        
+        <!-- Exibir Resultados -->
+        <h3>Resultados</h3>
+        <p id="adminResults"></p>
+        
+        <!-- Criar Novo Usuário -->
+        <h3>Criar Novo Usuário</h3>
+        <form id="newUserForm">
+            <label for="newUsername">Nome do Usuário:</label>
+            <input type="text" id="newUsername" required>
+            <label for="newPassword">Senha:</label>
+            <input type="password" id="newPassword" required>
+            <button type="submit">Criar Usuário</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
