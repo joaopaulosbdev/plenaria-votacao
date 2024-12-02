@@ -208,6 +208,38 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// Função para atualizar os resultados na página de resultados
+function updateResults() {
+    const votesYes = parseInt(localStorage.getItem("votesYes")) || 0;
+    const votesNo = parseInt(localStorage.getItem("votesNo")) || 0;
+
+    const resultsElement = document.getElementById("results");
+    if (resultsElement) {
+        resultsElement.textContent = `Sim - ${votesYes} votos\nNão - ${votesNo} votos`;
+    }
+}
+
+// Escuta mudanças no localStorage para atualizar os resultados em tempo real
+window.addEventListener("storage", function (event) {
+    if (event.key === "votesYes" || event.key === "votesNo") {
+        updateResults();
+    }
+});
+
+// Atualizar resultados ao carregar a página
+document.addEventListener("DOMContentLoaded", function () {
+    if (window.location.pathname.endsWith("result.html")) {
+        updateResults(); // Atualiza os resultados ao carregar a página
+
+        // Exibe o botão de logout, se o usuário estiver logado
+        const logoutButton = document.getElementById("logoutButton");
+        if (localStorage.getItem("isLoggedIn")) {
+            logoutButton.style.display = "block";
+            logoutButton.addEventListener("click", logout);
+        }
+    }
+});
+
 // Função para logout
 function logout() {
     localStorage.removeItem("isLoggedIn");
